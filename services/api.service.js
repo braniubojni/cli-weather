@@ -7,7 +7,7 @@ const langs = {
 };
 
 const getWeather = async (city) => {
-  const token = await getKeyValue(TOKEN_DICT.token);
+  const token = process.env.TOKEN || (await getKeyValue(TOKEN_DICT.token));
   if (!token) {
     throw new Error(
       'The API key was not specified, set it with command -t [API_KEY]'
@@ -24,6 +24,7 @@ const getWeather = async (city) => {
       },
     }
   );
+  console.log(data)
   return data;
 };
 // Without axios code will look like this
