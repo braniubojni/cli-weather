@@ -15,6 +15,21 @@ const saveToken = async (token) => {
   }
 };
 
+const getForecast = async () => {
+  try {
+    const weather = await getWeather(process.env.CITY);
+    console.log(weather);
+  } catch (e) {
+    if (e?.response?.status == 404) {
+      printError('City name is invalid');
+    } else if (e?.response?.status == 401) {
+      printError('Token is invalid');
+    } else {
+      printError(e.message);
+    }
+  }
+};
+
 const initClI = () => {
   const args = getArgs(process.argv);
   if (args.h) {
@@ -25,8 +40,7 @@ const initClI = () => {
   if (args.t) {
     return saveToken(args.t);
   }
-  getWeather('yerevan')
-  // Show weather
+  getForecast();
 };
 
 initClI();
