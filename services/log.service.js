@@ -24,7 +24,7 @@ const printWeather = (res, icon) => {
   console.log(
     `
   ${chalk.bgYellow('WEATHER')} Weather in city ${res.name} 
-  ${icon} ${res.weather[0].description}
+  ${icon}  ${res.weather[0].description}
   Temperature: ${res.main.temp} (feel like ${res.main.feels_like})
   Humidity:    ${res.main.humidity}%
   Wind speed:  ${res.wind.speed}

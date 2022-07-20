@@ -26,7 +26,6 @@ const getIcon = (icon) => {
 
 const getWeather = async (city) => {
   const token = process.env.TOKEN || (await getKeyValue(TOKEN_DICT.token));
-  console.log(city)
   if (!token) {
     throw new Error(
       'The API key was not specified, set it with command -t [API_KEY]'
