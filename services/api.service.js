@@ -1,13 +1,32 @@
 import axios from 'axios';
-import https from 'https';
 import { getKeyValue, TOKEN_DICT } from './storage.service.js';
 
-const langs = {
-  am: 'am',
+const getIcon = (icon) => {
+  switch (icon.slice(0, -1)) {
+    case '01':
+      return '☀️';
+    case '02':
+      return '⛅';
+    case '03':
+      return '🌥️';
+    case '04':
+      return '☁️';
+    case '09':
+      return '🌧️';
+    case '10':
+      return '🌦️';
+    case '11':
+      return '⛈️';
+    case '13':
+      return '❄️';
+    case '50':
+      return '🌫️';
+  }
 };
 
 const getWeather = async (city) => {
   const token = process.env.TOKEN || (await getKeyValue(TOKEN_DICT.token));
+  console.log(city)
   if (!token) {
     throw new Error(
       'The API key was not specified, set it with command -t [API_KEY]'
@@ -24,7 +43,6 @@ const getWeather = async (city) => {
       },
     }
   );
-  console.log(data)
   return data;
 };
 // Without axios code will look like this
@@ -40,4 +58,4 @@ const getWeather = async (city) => {
 //   resp.on('error', (err) => console.log('Error => ', err.message));
 // });
 
-export { getWeather };
+export { getWeather, getIcon };

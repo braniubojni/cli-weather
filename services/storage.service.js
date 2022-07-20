@@ -6,8 +6,8 @@ const filePath = join(homedir(), 'weather-cli-data.json');
 
 const TOKEN_DICT = {
   token: 'token',
-  city: 'city'
-}
+  city: 'city',
+};
 
 const saveKeyValue = async (key, value) => {
   let data = {};

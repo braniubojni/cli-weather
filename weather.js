@@ -1,9 +1,18 @@
 #!/usr/bin/env node
 
 import { getArgs } from './helpers/args.js';
-import { getWeather } from './services/api.service.js';
-import { printError, printHelp, printMessage } from './services/log.service.js';
-import { saveKeyValue, TOKEN_DICT } from './services/storage.service.js';
+import { getIcon, getWeather } from './services/api.service.js';
+import {
+  printError,
+  printHelp,
+  printMessage,
+  printWeather,
+} from './services/log.service.js';
+import {
+  getKeyValue,
+  saveKeyValue,
+  TOKEN_DICT,
+} from './services/storage.service.js';
 
 const saveToken = async (token) => {
   if (!token.length) return printError('Token was not provided');
@@ -15,10 +24,26 @@ const saveToken = async (token) => {
   }
 };
 
+const saveCity = async (city) => {
+  if (!city.length) {
+    return printError('City was not provided');
+  }
+  try {
+    // Checkin for city validation
+    await getWeather(city);
+
+    await saveKeyValue(TOKEN_DICT.city, city);
+    printMessage('City saved');
+  } catch (error) {
+    printError(error.message);
+  }
+};
+
 const getForecast = async () => {
   try {
-    const weather = await getWeather(process.env.CITY);
-    console.log(weather);
+    const city = process.env.CITY ?? (await getKeyValue(TOKEN_DICT.city));
+    const weather = await getWeather(city);
+    printWeather(weather, getIcon(weather.weather[0].icon));
   } catch (e) {
     if (e?.response?.status == 404) {
       printError('City name is invalid');
@@ -33,9 +58,10 @@ const getForecast = async () => {
 const initClI = () => {
   const args = getArgs(process.argv);
   if (args.h) {
-    printHelp();
+    return printHelp();
   }
   if (args.s) {
+    return saveCity(args.s);
   }
   if (args.t) {
     return saveToken(args.t);
